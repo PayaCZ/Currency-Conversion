@@ -46,7 +46,7 @@ def ulozit_soubor():
     datum = datumcas()
     castka = amount_input.get()
     
-    with open("C:/Users/Uzivatel/Desktop/Převod měny.txt", "a", encoding="utf-8") as f:
+    with open("Převod měny.txt", "a", encoding="utf-8") as f:
        f.write("\n")
        f.write(datum)
        f.write("\n")
