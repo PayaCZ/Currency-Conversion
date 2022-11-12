@@ -12,8 +12,6 @@ window.resizable(False, False) #
 window.config(bg="#222")
 window.iconbitmap("icon_many.ico")
 
-oddelovac = "-" * 40
-pokracovat = True
 
 # funkce web_scraping - kurz CNB
 def kurz_euro():
