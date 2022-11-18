@@ -1,6 +1,5 @@
 from tkinter import *
 
-
 from bs4 import BeautifulSoup as bs
 import requests
 from datetime import datetime
@@ -9,7 +8,7 @@ from datetime import datetime
 window = Tk()
 window.title("Převod měn")
 window.minsize(300, 200)  # velikost okna
-window.resizable(False, False)  #
+window.resizable(False, False)
 window.config(bg="#222")
 window.iconbitmap("icon_many.ico")
 
@@ -27,15 +26,20 @@ def kurz_euro():
 
 # funkce 1 czk = CNB
 def count_currency_czk():
-    amount_czk = float(amount_input.get()) * kurz_euro()
-    result_label_czk["text"] = round(amount_czk, 2)
+    try:
+        amount_czk = float(amount_input.get()) * kurz_euro()
+        result_label_czk["text"] = round(amount_czk, 2)
+    except (ValueError, ZeroDivisionError, NameError):
+        result_label_czk["text"] = "Zadávej pouze celá čísla!"
 
 
 # funkce 1 euro = CNB
 def count_currency_euro():
-
-    amount_eur = float(amount_input.get()) / kurz_euro()
-    result_label_euro["text"] = round(amount_eur, 2)
+    try:
+        amount_eur = float(amount_input.get()) / kurz_euro()
+        result_label_euro["text"] = round(amount_eur, 2)
+    except (ValueError, ZeroDivisionError, NameError):
+        result_label_euro["text"] = "Zadávej pouze celá čísla!"
 
 
 def ulozit_soubor():
@@ -44,7 +48,7 @@ def ulozit_soubor():
     datum = datumcas()
     castka = amount_input.get()
 
-    with open("Převod měny.txt", "a", encoding="utf-8") as f:
+    with open("prevod_meny.txt", "a", encoding="utf-8") as f:
         f.write("\n")
         f.write(datum)
         f.write("\n")
