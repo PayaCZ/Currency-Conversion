@@ -29,7 +29,7 @@ def count_currency_czk():
     try:
         amount_czk = float(amount_input.get()) * kurz_euro()
         result_label_czk["text"] = round(amount_czk, 2)
-    except (ValueError, ZeroDivisionError, NameError):
+    except (ValueError):
         result_label_czk["text"] = "Zadávej pouze celá čísla!"
 
 
@@ -38,7 +38,7 @@ def count_currency_euro():
     try:
         amount_eur = float(amount_input.get()) / kurz_euro()
         result_label_euro["text"] = round(amount_eur, 2)
-    except (ValueError, ZeroDivisionError, NameError):
+    except (ValueError):
         result_label_euro["text"] = "Zadávej pouze celá čísla!"
 
 
