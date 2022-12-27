@@ -4,16 +4,16 @@ from bs4 import BeautifulSoup as bs
 import requests
 from datetime import datetime
 
-# okno
+# okno Tk
 window = Tk()
 window.title("Převod měn")
 window.minsize(300, 200)  # velikost okna
 window.resizable(False, False)
 window.config(bg="#222")
-window.iconbitmap("icon_many.ico")
+window.iconbitmap("!portfolio!\prevod_men_uprava\icon_many.ico")
 
 
-# funkce web_scraping - kurz CNB
+# funkce web_scraping - kurz měny z ČNB
 def kurz_euro():
     response = requests.get("https://www.cnb.cz/cs/")
     soup = bs(response.text, "html.parser")
@@ -21,7 +21,7 @@ def kurz_euro():
     euro = soup.find(id="rate_eur")
     euro = euro.getText()
     euro_float = float(euro.replace(",", "."))
-    return euro_float
+    return round(euro_float, 2)
 
 
 # funkce 1 czk = CNB
@@ -29,7 +29,7 @@ def count_currency_czk():
     try:
         amount_czk = float(amount_input.get()) * kurz_euro()
         result_label_czk["text"] = round(amount_czk, 2)
-    except (ValueError):
+    except (ValueError, ZeroDivisionError, NameError):
         result_label_czk["text"] = "Zadávej pouze celá čísla!"
 
 
@@ -38,33 +38,29 @@ def count_currency_euro():
     try:
         amount_eur = float(amount_input.get()) / kurz_euro()
         result_label_euro["text"] = round(amount_eur, 2)
-    except (ValueError):
+    except (ValueError, ZeroDivisionError, NameError):
         result_label_euro["text"] = "Zadávej pouze celá čísla!"
 
 
 def ulozit_soubor():
     zapis_euro = str(result_label_euro["text"])
     zapis_czk = str(result_label_czk["text"])
-    datum = datumcas()
+    datum = datum_cas()
     castka = amount_input.get()
 
-    with open("prevod_meny.txt", "a", encoding="utf-8") as f:
-        f.write("\n")
-        f.write(datum)
-        f.write("\n")
-        f.write("Částka: ")
-        f.write(castka)
-        f.write("\n")
-        f.write(zapis_euro)
-        f.write(" euro")
-        f.write("\n")
-        f.write(zapis_czk)
-        f.write(" czk")
-        f.write("\n")
-        f.write("-" * 18)
+    # zápis převodu měny do txt souboru, poslední převod měny je vždy na začátku souboru
+    text_prevod_meny = f"\n{datum}\n1 euro = {str(kurz_euro())} czk\nČástka: {castka}\n{zapis_euro} euro\n{zapis_czk} czk\n{'-'*18} "
+
+    with open(
+        "!portfolio!\prevod_men_uprava\prevod_meny.txt", "r+", encoding="utf-8"
+    ) as f:
+        cist_obsah = f.read()
+        f.seek(0, 0)
+        f.write(text_prevod_meny)
+        f.write(cist_obsah)
 
 
-def datumcas():
+def datum_cas():
     datum_cas = datetime.now()
     datum_cas = datum_cas.strftime("%d.%m.%Y  %H:%M")
     return datum_cas
@@ -97,7 +93,7 @@ euro_CNB = Label(
 euro_CNB.grid(row=3, column=0)
 
 # čas + datum
-cas_datum = Label(text=(datumcas()), font=("Helvetica", 11), bg="#222", fg="white")
+cas_datum = Label(text=(datum_cas()), font=("Helvetica", 11), bg="#222", fg="white")
 cas_datum.grid(row=4, column=0)
 
 
