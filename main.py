@@ -10,7 +10,7 @@ window.title("Převod měn")
 window.minsize(300, 200)  # velikost okna
 window.resizable(False, False)
 window.config(bg="#222")
-window.iconbitmap("!portfolio!\prevod_men_uprava\icon_many.ico")
+window.iconbitmap("icon_many.ico")
 
 
 # funkce web_scraping - kurz měny z ČNB
@@ -52,7 +52,7 @@ def ulozit_soubor():
     text_prevod_meny = f"\n{datum}\n1 euro = {str(kurz_euro())} czk\nČástka: {castka}\n{zapis_euro} euro\n{zapis_czk} czk\n{'-'*18} "
 
     with open(
-        "!portfolio!\prevod_men_uprava\prevod_meny.txt", "r+", encoding="utf-8"
+        "prevod_meny.txt", "r+", encoding="utf-8"
     ) as f:
         cist_obsah = f.read()
         f.seek(0, 0)
